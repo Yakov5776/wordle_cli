@@ -62,11 +62,14 @@ namespace wordle_cli
                             }
                             break;
                         case ConsoleKey.Enter:
+                            if (letters != totalLetters) break;
                             submitted = true;
+                            currentTries++;
+                            Console.Write('\n');
                             break;
                         default:
                             if (char.IsLetter(key.KeyChar)) {
-                                if (curPos == letters && letters == totalLetters) break;
+                                if (curPos >= letters && letters == totalLetters) break;
                                 Console.SetCursorPosition(curPos, Console.CursorTop);
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.Write(key.Key);
