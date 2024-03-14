@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="wordlist.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wordlist.txt" />
+  </ItemGroup>
+
 </Project>

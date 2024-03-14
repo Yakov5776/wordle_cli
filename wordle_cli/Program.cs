@@ -1,21 +1,26 @@
 ﻿using System.Text;
 
 namespace wordle_cli
-{ 
+{
     class Program
     {
+        DictionaryManager dictionaryManager = new DictionaryManager();
+
         static void Main()
         {
             Console.Title = "wordle_cli | AP Demo by Yakov";
             NiceConsole.WriteColoredContent("Welcome to Wordle! Made by Yakov.\n", ConsoleColor.Cyan);
             int option = NiceConsole.WriteChoiceMenu("What would you like to do?", new string[] { "Play", "View stats", "Change the word dictionary", "Reset all", "Quit" }, ConsoleColor.Red, ConsoleColor.Yellow);
-        
+
             switch (option)
             {
                 case 1: // Play
                     Play();
                     break;
                 case 2: // View stats
+                    break;
+                case 3: // Change dictionary
+                    ChangeDict();
                     break;
                 case 4: // Quit
                     return;
@@ -56,9 +61,9 @@ namespace wordle_cli
                             if (curPos > 0)
                             {
 
-                            Console.CursorLeft--;
-                            curPos--;
-                            NiceConsole.WriteColoredContent('_'.ToString(), ConsoleColor.Cyan, false);
+                                Console.CursorLeft--;
+                                curPos--;
+                                NiceConsole.WriteColoredContent('_'.ToString(), ConsoleColor.Cyan, false);
                             }
                             break;
                         case ConsoleKey.Enter:
@@ -68,7 +73,8 @@ namespace wordle_cli
                             Console.Write('\n');
                             break;
                         default:
-                            if (char.IsLetter(key.KeyChar)) {
+                            if (char.IsLetter(key.KeyChar))
+                            {
                                 if (curPos >= letters && letters == totalLetters) break;
                                 Console.SetCursorPosition(curPos, Console.CursorTop);
                                 Console.ForegroundColor = ConsoleColor.White;
@@ -79,19 +85,13 @@ namespace wordle_cli
                             //Console.CursorLeft+=2;
                             break;
                     }
-                }   
+                }
             }
         }
-    }
 
-    public static class InputExtensions
-{
-    public static int Clamp(
-        this int value, int Min, int Max)
-    {
-        if (value < Min) { return Min; }
-        if (value > Max) { return Max; }
-        return value;
+        static void ChangeDict()
+        {
+
+        }
     }
-}
 }
