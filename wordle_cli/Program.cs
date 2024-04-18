@@ -23,6 +23,7 @@ namespace wordle_cli
                     ChangeDict();
                     break;
                 case 4: // Quit
+                    Environment.Exit(0);
                     return;
             }
         }
@@ -35,51 +36,57 @@ namespace wordle_cli
             int maxTries = 5;
             int currentTries = 0;
             int totalLetters = 5;
-            StringBuilder guessedWord = new StringBuilder(new string('_', totalLetters));
+            List<string> validWords = wordle_cli.Properties.Resources.wordlist.Split('\n').ToList();
+            string randomWord = validWords[new Random().Next(0, 2000)];
 
             while (maxTries > currentTries)
             {
-                NiceConsole.WriteColoredContent(guessedWord.ToString(), ConsoleColor.Cyan, false);
+                NiceConsole.WriteColoredContent(new StringBuilder(new string('_', totalLetters)).ToString(), ConsoleColor.Cyan, false);
                 Console.SetCursorPosition(0, Console.CursorTop);
 
                 bool submitted = false;
-                int letters = 0, curPos = 0;
+                int curPos = 0;
+                StringBuilder guess = new StringBuilder();
                 while (!submitted)
                 {
                     Console.SetCursorPosition(curPos, Console.CursorTop);
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     switch (key.Key)
                     {
-                        case ConsoleKey.LeftArrow:
-                            curPos = Math.Max(curPos - 1, 0);
-                            break;
-                        case ConsoleKey.RightArrow:
-                            curPos = Math.Min(curPos + 1, letters);
-                            break;
                         case ConsoleKey.Backspace:
                             if (curPos > 0)
                             {
-
                                 Console.CursorLeft--;
                                 curPos--;
-                                letters--;
+                                guess.Length--;
                                 NiceConsole.WriteColoredContent('_'.ToString(), ConsoleColor.Cyan, false);
                             }
                             break;
                         case ConsoleKey.Enter:
-                            if (letters != totalLetters) break;
+                            if (guess.Length != totalLetters) break;
+                            if (!validWords.Contains(guess.ToString())) break;
                             submitted = true;
                             currentTries++;
+                            Console.SetCursorPosition(0, Console.CursorTop);
+                            var guesses = Try(guess.ToString(), randomWord);
+                            for (int i = 0; i < guesses.Length; i++)
+                            {
+                                if (guesses[i] == LetterStatus.White) Console.ForegroundColor = ConsoleColor.White;
+                                else if (guesses[i] == LetterStatus.Green) Console.ForegroundColor = ConsoleColor.Green;
+                                else if (guesses[i] == LetterStatus.Yellow) Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write(Char.ToUpper(guess[i]));
+                            }
+
                             Console.Write('\n');
                             break;
                         default:
                             if (char.IsLetter(key.KeyChar))
                             {
-                                if (curPos >= letters && letters == totalLetters) break;
+                                if (curPos >= guess.Length && guess.Length == totalLetters) break;
                                 Console.SetCursorPosition(curPos, Console.CursorTop);
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.Write(key.Key);
-                                letters++;
+                                guess.Append(key.KeyChar);
                                 curPos++;
                             }
                             //Console.CursorLeft+=2;
@@ -87,6 +94,8 @@ namespace wordle_cli
                     }
                 }
             }
+
+            Main();
         }
 
         enum LetterStatus
