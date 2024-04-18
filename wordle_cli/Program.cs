@@ -51,11 +51,10 @@ namespace wordle_cli
                     switch (key.Key)
                     {
                         case ConsoleKey.LeftArrow:
-                            //Console.CursorLeft = Math.Max(Console.CursorLeft - 1, 0);
-                            curPos = (curPos - 1).Clamp(0, letters);
+                            curPos = Math.Max(curPos - 1, 0);
                             break;
                         case ConsoleKey.RightArrow:
-                            curPos = (curPos + 1).Clamp(0, letters);
+                            curPos = Math.Min(curPos + 1, letters);
                             break;
                         case ConsoleKey.Backspace:
                             if (curPos > 0)
@@ -63,6 +62,7 @@ namespace wordle_cli
 
                                 Console.CursorLeft--;
                                 curPos--;
+                                letters--;
                                 NiceConsole.WriteColoredContent('_'.ToString(), ConsoleColor.Cyan, false);
                             }
                             break;
@@ -87,6 +87,50 @@ namespace wordle_cli
                     }
                 }
             }
+        }
+
+        enum LetterStatus
+        {
+            White,
+            Green,
+            Yellow
+        }
+
+        static LetterStatus[] Try(string guess, string answer)
+        {
+            char[] guessC = guess.ToCharArray();
+            char[] answerC = answer.ToCharArray();
+
+            var result = new LetterStatus[guessC.Length];
+
+            for (int i = 0; i < guessC.Length; i++)
+            {
+                if (guessC[i] == answerC[i])
+                {
+                    result[i] = LetterStatus.Green;
+                    guessC[i] = '*';
+                    answerC[i] = '*';
+                }
+            }
+
+            for (int i = 0; i < guessC.Length; i++)
+            {
+                if (guessC[i] != '*' && answerC.Contains(guessC[i]))
+                {
+                    result[i] = LetterStatus.Yellow;
+                    var index = Array.IndexOf(answerC, guessC[i]);
+                    guessC[i] = '*';
+                    answerC[index] = '*';
+                }
+            }
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                if (result[i] == 0)
+                    result[i] = LetterStatus.White;
+            }
+
+            return result;
         }
 
         static void ChangeDict()
