@@ -4,7 +4,15 @@ namespace wordle_cli
 {
     class Program
     {
+        enum Difficulty
+        {
+            Easy,
+            Medium,
+            Hard
+        }
+
         static Difficulty selectedDifficulty = Difficulty.Easy;
+
         static int victories = 0;
         static int losses = 0;
         static int streak = 0;
@@ -189,13 +197,6 @@ namespace wordle_cli
                 Console.BackgroundColor = ConsoleColor.Black;
             }
             Console.Write('\n');
-        }
-
-        enum Difficulty
-        {
-            Easy,
-            Medium,
-            Hard
         }
 
         static ConsoleColor GetDifficultyColor(Difficulty difficulty)
