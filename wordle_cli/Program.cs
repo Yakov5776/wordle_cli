@@ -12,7 +12,7 @@ namespace wordle_cli
         {
             Console.Title = "wordle_cli | AP Demo";
             Console.Clear();
-            NiceConsole.WriteColoredContent("Welcome to Wordle! Made by Yakov.\n", ConsoleColor.Cyan) ;
+            NiceConsole.WriteColoredContent("Welcome to Wordle!\n", ConsoleColor.Cyan) ;
 
             NiceConsole.WriteColoredContent("Difficulty: ", ConsoleColor.Gray, false);
             NiceConsole.WriteColoredContent(selectedDifficulty.ToString(), GetDifficultyColor(selectedDifficulty));
@@ -32,6 +32,7 @@ namespace wordle_cli
                     break;
                 case 4:
                     selectedDifficulty = Difficulty.Easy;
+                    victories = losses = streak = 0;
                     break;
                 case 5:
                     Environment.Exit(0);
