@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace wordle_cli
 {
     internal class NiceConsole
@@ -24,6 +20,8 @@ namespace wordle_cli
         {
             int index = 1;
             string menu = string.Empty;
+
+            // Generate the menu string
             foreach (string Option in Options)
             {
                 menu += $"{index}. {Option}\n";
@@ -40,6 +38,7 @@ namespace wordle_cli
             {
                 Console.ForegroundColor = ConsoleColor.White;
 
+                // Read and validate choice
                 var isNumeric = int.TryParse(Console.ReadLine(), out choice);
 
                 if (isNumeric && choice > 0 && choice <= Options.Length)
@@ -48,6 +47,7 @@ namespace wordle_cli
                 }
                 else
                 {
+                    // If choice is invalid, clear the current line and re-prompt for input
                     Console.SetCursorPosition(0, Console.CursorTop - 1);
                     int currentLineCursor = Console.CursorTop;
                     Console.Write(new string(' ', Console.WindowWidth));
