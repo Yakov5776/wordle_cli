@@ -189,12 +189,13 @@ namespace wordle_cli
         static void PrintProcessedGuess(LetterStatus[] guessCorrectness, StringBuilder guess)
         {
             Console.SetCursorPosition(0, Console.CursorTop);
+            ConsoleColor originalBackgroundColor = Console.BackgroundColor;
             for (int i = 0; i < guessCorrectness.Length; i++)
             {
                 if (guessCorrectness[i] == LetterStatus.CorrectLocation) Console.BackgroundColor = ConsoleColor.Green;
                 else if (guessCorrectness[i] == LetterStatus.IncorrectLocation) Console.BackgroundColor = ConsoleColor.DarkYellow;
                 Console.Write(Char.ToUpper(guess[i]));
-                Console.BackgroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = originalBackgroundColor;
             }
             Console.Write('\n');
         }
